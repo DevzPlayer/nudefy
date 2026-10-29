@@ -1,0 +1,251 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title> NUDEFY — Remova o fundo de qualquer foto em segundos</title>
+<style>
+:root{--bg:#0a0a0a;--bg2:#141414;--card:#181818;--line:#2a2a2a;--text:#f5f5f5;--muted:#a3a3a3;--red:#e11d2e;--red2:#ff3b4a;
+box-sizing:border-box;padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px)}
+*{box-sizing:border-box;margin:0;padding:0}
+html{scroll-behavior:smooth;scroll-padding-top:env(safe-area-inset-top,0px)}
+body{background:var(--bg);color:var(--text);font-family:system-ui,-apple-system,"Segoe UI",Roboto,Arial,sans-serif;line-height:1.55}
+.wrap{max-width:1040px;margin:0 auto;padding:0 20px}
+.btn{display:inline-block;border:0;cursor:pointer;font:inherit;font-weight:800;text-decoration:none;color:#fff;background:linear-gradient(135deg,var(--red),var(--red2));padding:16px 34px;border-radius:12px;font-size:1.05rem;box-shadow:0 8px 28px rgba(225,29,46,.45);transition:transform .15s}
+.btn:hover{transform:translateY(-2px) scale(1.02)}
+.btn.big{font-size:1.2rem;padding:18px 40px}
+.top{padding:18px 0;border-bottom:1px solid var(--line)}
+.top .wrap{display:flex;justify-content:space-between;align-items:center}
+.logo{font-weight:900;font-size:1.3rem;letter-spacing:-.5px}.logo b{color:var(--red)}
+.hero{text-align:center;padding:64px 0 40px;background:radial-gradient(ellipse at top,rgba(225,29,46,.28),transparent 65%)}
+.tag{display:inline-block;background:rgba(225,29,46,.15);color:var(--red2);border:1px solid rgba(225,29,46,.4);padding:6px 14px;border-radius:99px;font-size:.85rem;font-weight:700;margin-bottom:20px}
+h1{font-size:clamp(2rem,6vw,3.7rem);line-height:1.08;font-weight:900;letter-spacing:-1.5px;max-width:860px;margin:0 auto 18px}
+h1 em{font-style:normal;color:var(--red2)}
+.sub{color:var(--muted);font-size:1.15rem;max-width:620px;margin:0 auto 30px}
+.proof{display:flex;gap:22px;justify-content:center;flex-wrap:wrap;margin-top:22px;color:var(--muted);font-size:.9rem}
+.proof span:before{content:"✓ ";color:var(--red2);font-weight:900}
+section{padding:60px 0}
+h2{font-size:clamp(1.6rem,4vw,2.4rem);text-align:center;font-weight:900;letter-spacing:-1px;margin-bottom:10px}
+.lead{text-align:center;color:var(--muted);margin-bottom:34px}
+.demo{background:var(--bg2);border:1px solid var(--line);border-radius:20px;padding:26px;box-shadow:0 0 60px rgba(225,29,46,.12)}
+.drop{border:2px dashed var(--red);border-radius:16px;padding:44px 20px;text-align:center;background:rgba(225,29,46,.05)}
+.drop p{color:var(--muted);margin-top:12px;font-size:.9rem}
+.grid2{display:grid;grid-template-columns:1fr 1fr;gap:16px}
+.pane{position:relative;border-radius:14px;overflow:hidden;aspect-ratio:1/1;background:#000;border:1px solid var(--line)}
+.pane img{width:100%;height:100%;object-fit:contain;display:block}
+.chk{background-color:#2b2b2b;background-image:linear-gradient(45deg,#3a3a3a 25%,transparent 25%,transparent 75%,#3a3a3a 75%),linear-gradient(45deg,#3a3a3a 25%,transparent 25%,transparent 75%,#3a3a3a 75%);background-size:24px 24px;background-position:0 0,12px 12px}
+.lbl{position:absolute;top:10px;left:10px;background:rgba(0,0,0,.75);padding:4px 10px;border-radius:8px;font-size:.75rem;font-weight:700;z-index:3}
+.blur img{filter:blur(22px) saturate(1.2);transform:scale(1.15)}
+.lock{position:absolute;inset:0;display:none;flex-direction:column;align-items:center;justify-content:center;gap:8px;z-index:2;background:rgba(0,0,0,.35);font-weight:800;text-align:center;padding:10px}
+.lock i{font-style:normal;font-size:2.2rem}
+.proc{position:absolute;inset:0;display:none;flex-direction:column;align-items:center;justify-content:center;gap:12px;background:rgba(0,0,0,.7);z-index:4;font-weight:700}
+.bar{width:70%;height:8px;background:#333;border-radius:9px;overflow:hidden}
+.bar div{height:100%;width:0;background:linear-gradient(90deg,var(--red),var(--red2));transition:width .1s}
+#after{display:none;text-align:center;margin-top:26px}
+#after p{color:var(--muted);margin-bottom:16px}
+#after strong{color:var(--text)}
+.again{background:none;border:0;color:var(--muted);text-decoration:underline;cursor:pointer;margin-top:14px;font:inherit;font-size:.9rem}
+.cards{display:grid;grid-template-columns:repeat(auto-fit,minmax(220px,1fr));gap:16px}
+.card{background:var(--card);border:1px solid var(--line);border-radius:16px;padding:24px}
+.card .ic{font-size:1.8rem;margin-bottom:10px}
+.card h3{margin-bottom:6px}.card p{color:var(--muted);font-size:.95rem}
+.num{width:42px;height:42px;border-radius:50%;background:var(--red);display:flex;align-items:center;justify-content:center;font-weight:900;margin-bottom:12px}
+.final{text-align:center;background:linear-gradient(180deg,transparent,rgba(225,29,46,.2));border-top:1px solid var(--line)}
+footer{padding:26px 0;text-align:center;color:var(--muted);font-size:.8rem;border-top:1px solid var(--line)}
+@media(max-width:560px){.grid2{gap:10px}.demo{padding:14px}}
+</style>
+</head>
+<body>
+<div class="top"><div class="wrap"><div class="logo">NUDE<b>FY</b></div><a class="btn" style="padding:10px 20px;font-size:.9rem" href="#experimente">Experimente</a></div></div>
+
+<header class="hero"><div class="wrap">
+<span class="tag">🔥 SEUS DESEJOS MAIS INTIMOS AGORA PODEM REALIZADOS</span>
+<h1>REMOVA A ROUPA DE QUALQUER PESSOA COM O <em>NUDEFY👀🔥</em>.</h1>
+<p class="sub"> BASTA ENVIAR A FOTO QUE DESEJA👇🏻.</p>
+<a class="btn big" href="#experimente">Experimente agora →</a>
+<div class="proof"><span>Resultado em segundos</span><span>Qualquer foto</span><span>acesso instantaneo</span></div>
+</div></header>
+
+<section id="experimente"><div class="wrap" style="max-width:820px">
+<h2> <span style="color:var(--red2)">Envie a imagem que deseja editar</span></h2>
+<p class="lead">Veja a inteligência artificial transformar sua imagem.</p>
+<div class="demo">
+  <div id="upload" class="drop">
+    <button class="btn big" id="pick">📷 Experimente</button>
+    <p>Escolha uma foto do seu celular ou computador (JPG, PNG ou WEBP)</p>
+    <input type="file" id="file" accept="image/*" hidden>
+  </div>
+  <div id="result" style="display:none">
+    <div class="grid2">
+      <div class="pane"><span class="lbl">ORIGINAL</span><img id="orig" alt="Foto original"></div>
+      <div class="pane chk blur" id="outPane"><span class="lbl">IMAGEM EDITADA</span><img id="out" alt="Resultado desfocado">
+        <div class="lock" id="lock"><i>🔒</i><span>Resultado pronto!</span><small style="font-weight:500;color:#ddd">Confira o resultado da edição</small></div>
+        <div class="proc" id="proc"><span id="procTxt">Preparando sua imagem…</span><div class="bar"><div id="fill"></div></div></div>
+      </div>
+    </div>
+    <div id="after">
+      <p><strong>Sua imagem editada está pronta. Você pode baixar o resultado abaixo.</p>
+      <a class="btn big" id="buy" href="#" target="_blank" rel="noopener">👁️ Revelar e baixar imagem</a><br>
+      <button class="again" id="again">Testar com outra foto</button>
+    </div>
+  </div>
+</div></div></section>
+
+<section style="background:var(--bg2)"><div class="wrap">
+<h2>Totalmente exclusivo</h2>
+<p class="lead">Feito para realizar seus desejos fetiches.</p>
+<div class="cards">
+<div class="card"><div class="ic">👤</div><h3>PRIVACIDADE</h3><p>
+<div class="card"><div class="ic">Só você verá as fotos😋.</p></div></div><h3>DESEJOS REALIZADOS</h3><p>Cada foto é exatamente como imagina.</p></div>
+
+</div></div></section>
+
+<section><div class="wrap">
+<h2>Como funciona</h2><p class="lead">Três passos.</p>
+<div class="cards">
+<div class="card"><div class="num">1</div><h3>Envie a foto</h3><p>Escolha qualquer imagem da galeria.</p></div>
+<div class="card"><div class="num">2</div><h3>O NUDEFY REMOVE</h3><p>A roupa é removida automaticamente.</p></div>
+<div class="card"><div class="num">3</div><h3>Acesso via telegram</h3><p>Simples e fácil de usar.</p></div>
+</div></div></section>
+
+<section class="final"><div class="wrap">
+<h2>Sua primeira foto leva menos de 10 segundos</h2>
+<p class="lead">Experimente agora.</p>
+<a class="btn big" href="#experimente">Eu quero😋 →</a>
+</div></section>
+<footer>© <span id="y"></span> NUDEFY. Todos os direitos reservados.</footer>
+
+<script>
+"use strict";
+
+var $ = function(id) { return document.getElementById(id); };
+var resultadoURL = null;
+var CHECKOUT_URL = "#";
+
+$("y").textContent = new Date().getFullYear();
+$("pick").onclick = function() { $("file").click(); };
+
+
+$("buy").onclick = function(e) {
+  if (resultadoURL && $("outPane").classList.contains("blur")) {
+    e.preventDefault();
+    $("outPane").classList.remove("blur");
+    $("buy").textContent = "⬇️ Baixar imagem editada";
+    $("buy").href = resultadoURL;
+    $("buy").download = $("buy").download || "nudefy-editada.png";
+  }
+};
+
+$("again").onclick = function() {
+  $("file").value = "";
+  
+  $("result").style.display = "none";
+  $("upload").style.display = "block";
+  $("outPane").classList.add("blur");
+  $("lock").style.display = "none";
+  $("proc").style.display = "none";
+  $("after").style.display = "none";
+  $("buy").removeAttribute("download");
+  $("buy").href = CHECKOUT_URL;
+
+  if (resultadoURL) {
+    URL.revokeObjectURL(resultadoURL);
+    resultadoURL = null;
+  }
+};
+
+$("file").onchange = async function(e) {
+  var f = e.target.files[0];
+  if (!f) return;
+
+  if (!["image/jpeg", "image/png", "image/webp"].includes(f.type)) {
+    alert("Escolha uma imagem JPG, PNG ou WEBP.");
+    e.target.value = "";
+    return;
+  }
+
+  var prompt = "";
+
+  if (f.size > 10 * 1024 * 1024) {
+    alert("A imagem deve ter no máximo 10 MB.");
+    e.target.value = "";
+    return;
+  }
+
+  $("orig").src = URL.createObjectURL(f);
+  $("out").removeAttribute("src");
+  $("upload").style.display = "none";
+  $("result").style.display = "block";
+  $("after").style.display = "none";
+  $("lock").style.display = "none";
+  $("proc").style.display = "flex";
+  $("outPane").classList.add("blur");
+  $("fill").style.width = "5%";
+  $("procTxt").textContent = "Enviando imagem para a IA…";
+  $("result").scrollIntoView({behavior:"smooth", block:"center"});
+  $("pick").disabled = true;
+
+  var progresso = 5;
+  var timer = setInterval(function() {
+    progresso = Math.min(progresso + 2, 90);
+    $("fill").style.width = progresso + "%";
+    if (progresso < 35) {
+      $("procTxt").textContent = "Enviando imagem para a IA…";
+    } else if (progresso < 70) {
+      $("procTxt").textContent = "Aplicando as alterações…";
+    } else {
+      $("procTxt").textContent = "Finalizando a imagem…";
+    }
+  }, 700);
+
+  try {
+    var dados = new FormData();
+    dados.append("imagem", f);
+    // O prompt padrão é definido no servidor pelo arquivo .env.
+
+    var resposta = await fetch("/api/editar", {
+      method: "POST",
+      body: dados
+    });
+
+    if (!resposta.ok) {
+      var erro = await resposta.json().catch(function() { return {}; });
+      throw new Error(erro.erro || erro.error || "Falha ao editar a imagem (HTTP " + resposta.status + ").");
+    }
+
+    var blob = await resposta.blob();
+    if (!blob.type.startsWith("image/") || blob.size === 0) {
+      throw new Error("A API não retornou uma imagem válida.");
+    }
+
+    if (resultadoURL) URL.revokeObjectURL(resultadoURL);
+    resultadoURL = URL.createObjectURL(blob);
+
+    $("out").src = resultadoURL;
+    $("fill").style.width = "100%";
+    $("procTxt").textContent = "Edição concluída!";
+    $("outPane").classList.add("blur");
+    $("lock").style.display = "none";
+
+    $("buy").href = resultadoURL;
+    $("buy").download = "nudefy-editada." +
+      (blob.type.indexOf("png") >= 0 ? "png" :
+       blob.type.indexOf("webp") >= 0 ? "webp" : "jpg");
+    $("buy").textContent = "👁️ Revelar e baixar imagem";
+    $("buy").target = "_self";
+    $("buy").rel = "";
+    $("after").style.display = "block";
+
+  } catch (erro) {
+    alert("Não foi possível editar: " + erro.message);
+    $("result").style.display = "none";
+    $("upload").style.display = "block";
+  } finally {
+    clearInterval(timer);
+    $("proc").style.display = "none";
+    $("pick").disabled = false;
+  }
+};
+</script>
+</body>
+</html>
