@@ -210,37 +210,35 @@ var temporizadorContagem = null;
 var pixExpiraEm = null;
 
 function iniciarContagemPix(dataExpiracao) {
-  if (temporizadorContagem) clearInterval(temporizadorContagem);
+  if (temporizadorContagem) {
+    clearInterval(temporizadorContagem);
+    temporizadorContagem = null;
+  }
 
-  var prazo = Date.parse(dataExpiracao);
+  pixExpiraEm = null;
   var visor = $("pixCountdown");
 
-  if (!Number.isFinite(prazo)) {
-    pixExpiraEm = null;
-    visor.textContent = "Validade não informada pelo servidor.";
+  if (!dataExpiracao) {
+    visor.textContent = "Validade do QR Code não informada pelo Asaas.";
     return;
   }
 
-  pixExpiraEm = prazo;
+  // O Asaas retorna a data no formato YYYY-MM-DD HH:mm:ss.
+  // Mantemos os componentes recebidos, sem converter o fuso horário.
+  var partes = String(dataExpiracao).match(
+    /^(\d{4})-(\d{2})-(\d{2})[ T](\d{2}):(\d{2})(?::(\d{2}))?/
+  );
 
-  function atualizar() {
-    var restante = Math.max(0, Math.floor((pixExpiraEm - Date.now()) / 1000));
-    var minutos = Math.floor(restante / 60);
-    var segundos = restante % 60;
-
-    visor.textContent = restante > 0
-      ? "Pix expira em " + String(minutos).padStart(2, "0") + ":" + String(segundos).padStart(2, "0")
-      : "QR Code expirado. Gere um novo pagamento.";
-
-    if (restante <= 0) {
-      clearInterval(temporizadorContagem);
-      temporizadorContagem = null;
-      $("pixStatus").textContent = "O prazo deste QR Code terminou.";
-    }
+  if (!partes) {
+    visor.textContent = "Validade informada pelo Asaas: " + dataExpiracao;
+    return;
   }
 
-  atualizar();
-  temporizadorContagem = setInterval(atualizar, 1000);
+  var dataFormatada = partes[3] + "/" + partes[2] + "/" + partes[1];
+  var horaFormatada = partes[4] + ":" + partes[5];
+
+  visor.textContent =
+    "QR Code válido até " + dataFormatada + " às " + horaFormatada;
 }
 
 function autorizacao() {
