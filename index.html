@@ -203,7 +203,24 @@ $("file").onchange = async function(e) {
     dados.append("imagem", f);
     // O prompt padrão é definido no servidor pelo arquivo .env.
 
-    var resposta = await fetch("/api/editar", {
+    // Descobre dinamicamente o endereço atual da API.
+    var configResposta = await fetch(
+      "https://raw.githubusercontent.com/DevzPlayer/nudefy/main/config.json?t=" + Date.now(),
+      { cache: "no-store" }
+    );
+
+    if (!configResposta.ok) {
+      throw new Error("Não foi possível localizar o servidor da NUDEFY.");
+    }
+
+    var config = await configResposta.json();
+    var apiBase = String(config.apiBaseUrl || "").replace(/\/+$/, "");
+
+    if (!/^https:\/\/[a-zA-Z0-9-]+\.trycloudflare\.com$/.test(apiBase)) {
+      throw new Error("Endereço da API inválido.");
+    }
+
+    var resposta = await fetch(apiBase + "/nudefy/api/editar", {
       method: "POST",
       body: dados
     });
