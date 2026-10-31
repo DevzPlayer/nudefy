@@ -64,6 +64,11 @@ footer{padding:26px 0;text-align:center;color:var(--muted);font-size:.8rem;borde
 #pixArea textarea{font:inherit;font-size:.8rem}
 #pixArea button,#paidArea a{margin-top:10px}
 
+
+.plock{position:absolute;inset:0;z-index:3;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:8px;color:#fff;pointer-events:none;text-shadow:0 2px 12px rgba(0,0,0,.6)}
+.plock span{font-weight:800;font-size:1rem;letter-spacing:.04em;background:rgba(0,0,0,.45);padding:5px 14px;border-radius:999px;backdrop-filter:blur(4px)}
+.plock svg{filter:drop-shadow(0 2px 8px rgba(0,0,0,.6))}
+.blur img{filter:blur(14px) saturate(.9) brightness(.8)!important;transform:scale(1.12)}
 </style>
 </head>
 <body>
@@ -89,8 +94,12 @@ footer{padding:26px 0;text-align:center;color:var(--muted);font-size:.8rem;borde
   <div id="result" style="display:none">
     <div class="grid2">
       <div class="pane"><span class="lbl">ORIGINAL</span><img id="orig" alt="Foto original"></div>
-      <div class="pane chk blur" id="outPane"><span class="lbl">Preview</span><img id="out" alt="Resultado desfocado">
+      <div class="pane chk blur" id="outPane"><img id="out" alt="Resultado desfocado">
 
+        <div class="plock" id="plock">
+          <svg width="34" height="34" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><rect x="4" y="11" width="16" height="10" rx="2.5"/><path d="M8 11V7a4 4 0 0 1 8 0v4"/></svg>
+          <span>Preview</span>
+        </div>
         <div class="proc" id="proc"><span id="procTxt">Preparando sua imagem…</span><div class="bar"><div id="fill"></div></div></div>
       </div>
     </div>
