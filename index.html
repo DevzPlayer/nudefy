@@ -115,7 +115,7 @@ footer{padding:26px 0;text-align:center;color:var(--muted);font-size:.8rem;borde
           <h3>Pagamento via Pix</h3>
           <p id="pixStatus" style="color:var(--muted);margin:10px 0">Aguardando pagamento...</p>
           <p id="pixCountdown" style="font-size:1.1rem;font-weight:900;margin:12px 0;color:var(--red2)">Aguardando validade do Pix...</p>
-          <img id="pixQr" alt="QR Code Pix" style="display:none;width:220px;max-width:100%;margin:15px auto;background:white;padding:10px;border-radius:10px">
+          <div id="pixQr" role="img" aria-label="QR Code Pix" style="display:none;width:220px;max-width:100%;margin:15px auto;background:white;padding:10px;border-radius:10px;text-align:center"></div>
           <label for="pixCode">Pix Copia e Cola</label>
           <textarea id="pixCode" readonly rows="4" style="width:100%;padding:12px;border-radius:9px;background:#080808;color:white;border:1px solid var(--line);resize:vertical"></textarea>
           <button class="btn" id="copyPix" type="button" style="margin-top:10px">Copiar código Pix</button>
@@ -170,7 +170,7 @@ footer{padding:26px 0;text-align:center;color:var(--muted);font-size:.8rem;borde
 </div></section>
 <footer>© <span id="y"></span> NUDEFY. Todos os direitos reservados.</footer>
 
-<script src="https://cdnjs.cloudflare.com/ajax/libs/qrcode/1.5.4/qrcode.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/qrcodejs/1.0.0/qrcode.min.js"></script>
 <script>
 "use strict";
 var $ = function(id) { return document.getElementById(id); };
@@ -303,22 +303,31 @@ $("pay").onclick = async function() {
 
     var imagemQr = $("pixQr");
     imagemQr.style.display = "none";
-    imagemQr.removeAttribute("src");
+    imagemQr.innerHTML = "";
 
     if (dados.pix.imagem) {
-      imagemQr.src = "data:image/png;base64," + dados.pix.imagem;
+      var imgQr = document.createElement("img");
+      imgQr.src = "data:image/png;base64," + dados.pix.imagem;
+      imgQr.alt = "QR Code Pix";
+      imgQr.style.cssText = "display:block;width:200px;max-width:100%;height:auto;margin:auto";
+      imagemQr.appendChild(imgQr);
       imagemQr.style.display = "block";
-    } else if (window.QRCode && typeof QRCode.toDataURL === "function") {
+    } else if (window.QRCode) {
       try {
-        imagemQr.src = await QRCode.toDataURL(dados.pix.copiaECola, {
+        new QRCode(imagemQr, {
+          text: dados.pix.copiaECola,
           width: 440,
-          margin: 2,
-          errorCorrectionLevel: "M"
+          height: 440,
+          colorDark: "#000000",
+          colorLight: "#ffffff",
+          correctLevel: QRCode.CorrectLevel.M
         });
         imagemQr.style.display = "block";
       } catch (erroQr) {
         console.warn("[NUDEFY] Não foi possível gerar o QR Code:", erroQr);
       }
+    } else {
+      console.error("[NUDEFY] Biblioteca QRCodeJS não carregada.");
     }
 
     $("pixArea").style.display = "block";
