@@ -33,11 +33,13 @@ h2{font-size:clamp(1.6rem,4vw,2.4rem);text-align:center;font-weight:900;letter-s
 .grid2{display:grid;grid-template-columns:1fr 1fr;gap:16px}
 .pane{position:relative;border-radius:14px;overflow:hidden;aspect-ratio:1/1;background:#000;border:1px solid var(--line)}
 .pane img{width:100%;height:100%;object-fit:contain;display:block}
-.chk{background-color:#2b2b2b;background-image:linear-gradient(45deg,#3a3a3a 25%,transparent 25%,transparent 75%,#3a3a3a 75%),linear-gradient(45deg,#3a3a3a 25%,transparent 25%,transparent 75%,#3a3a3a 75%);background-size:24px 24px;background-position:0 0,12px 12px}
+.chk{background:#151515}
 .lbl{position:absolute;top:10px;left:10px;background:rgba(0,0,0,.75);padding:4px 10px;border-radius:8px;font-size:.75rem;font-weight:700;z-index:3}
-.blur img{filter:blur(22px) saturate(1.2);transform:scale(1.15)}
-.lock{position:absolute;inset:0;display:none;flex-direction:column;align-items:center;justify-content:center;gap:8px;z-index:2;background:rgba(0,0,0,.35);font-weight:800;text-align:center;padding:10px}
-.lock i{font-style:normal;font-size:2.2rem}
+.blur img{filter:blur(28px) saturate(.85) brightness(.62);transform:scale(1.2)}
+.lock{position:absolute;inset:0;display:none;flex-direction:column;align-items:center;justify-content:center;gap:12px;z-index:2;background:linear-gradient(180deg,rgba(8,8,8,.28),rgba(8,8,8,.76));font-weight:800;text-align:center;padding:18px;backdrop-filter:blur(2px)}
+.lock i{font-style:normal;font-size:1.7rem;width:58px;height:58px;display:flex;align-items:center;justify-content:center;border:1px solid rgba(255,255,255,.22);border-radius:50%;background:rgba(255,255,255,.12);box-shadow:0 8px 28px rgba(0,0,0,.3);backdrop-filter:blur(12px)}
+.lock span{font-size:clamp(.95rem,3vw,1.15rem);line-height:1.3}
+.lock small{display:block;max-width:230px;font-size:.78rem;line-height:1.55;color:#e2e2e2!important;font-weight:500}
 .proc{position:absolute;inset:0;display:none;flex-direction:column;align-items:center;justify-content:center;gap:12px;background:rgba(0,0,0,.7);z-index:4;font-weight:700}
 .bar{width:70%;height:8px;background:#333;border-radius:9px;overflow:hidden}
 .bar div{height:100%;width:0;background:linear-gradient(90deg,var(--red),var(--red2));transition:width .1s}
@@ -92,7 +94,7 @@ footer{padding:26px 0;text-align:center;color:var(--muted);font-size:.8rem;borde
     <div class="grid2">
       <div class="pane"><span class="lbl">ORIGINAL</span><img id="orig" alt="Foto original"></div>
       <div class="pane chk blur" id="outPane"><span class="lbl">IMAGEM EDITADA</span><img id="out" alt="Resultado desfocado">
-        <div class="lock" id="lock"><i>🔒</i><span>Resultado pronto!</span><small style="font-weight:500;color:#ddd">Confira o resultado da edição</small></div>
+        <div class="lock" id="lock"><i>🔒</i><span>Sua transformação está pronta</span><small>Seu resultado está protegido. Após a confirmação do Pix, você poderá visualizar e baixar sua imagem em alta qualidade.</small></div>
         <div class="proc" id="proc"><span id="procTxt">Preparando sua imagem…</span><div class="bar"><div id="fill"></div></div></div>
       </div>
     </div>
@@ -475,7 +477,7 @@ $("file").onchange = async function(e) {
 
     $("fill").style.width = "100%";
     $("lock").innerHTML =
-      "<i>🔒</i><span>Imagem protegida</span><small style='font-weight:500;color:#ddd'>A imagem só será liberada após confirmação do pagamento.</small>";
+      "<i>🔒</i><span>Sua transformação está pronta</span><small>Seu resultado está protegido. Após a confirmação do Pix, você poderá visualizar e baixar sua imagem em alta qualidade.</small>";
     $("lock").style.display = "flex";
     $("outPane").classList.add("blur");
 
